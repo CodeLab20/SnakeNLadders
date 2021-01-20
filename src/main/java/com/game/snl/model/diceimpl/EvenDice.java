@@ -12,20 +12,17 @@ public class EvenDice implements Dice {
 	private Random rnd = new Random();
 	
 	public int rollDice() {
-		int num = -1;
+		int num = 0;
 		
 		do {
 			num = Math.abs(rnd.nextInt(7));
-		}while(num != 0);
+		}while(num == 0);
 
 		/*
 		 * As this is even dice, we need to increment odd number by 1
 		 */
 		
-		if(num % 2 == 1)
-			num++; 
-		
-		return num;
+		return (num % 2 == 1) ? ++num : num;
 	}
 
 }

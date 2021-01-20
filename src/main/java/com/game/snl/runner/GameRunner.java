@@ -35,18 +35,25 @@ public class GameRunner {
 	}
 	
 	public GameRunner(List<Player> players, int turns) {
-		Objects.requireNonNull(players, "Players can not be null!!");
+		validatePlayers(players);
 		
 		this.players.addAll(players);
 		this.turns = turns <= 0 ? -1 : turns;
 	}
 	
 	public GameRunner(Game game, List<Player> players, int turns) {
-		Objects.requireNonNull(players, "Players can not be null!!");
+		validatePlayers(players);
 		
 		this.game = game;
 		this.players.addAll(players);
 		this.turns = turns <= 0 ? -1 : turns;
+	}
+
+	private void validatePlayers(List<Player> players) {
+		Objects.requireNonNull(players, "Players can not be null!!");
+		
+		if(players.isEmpty())
+			throw new IllegalArgumentException("Players must be non empty!!");
 	}
 	
 	

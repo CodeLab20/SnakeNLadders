@@ -29,9 +29,22 @@ public class GameRunner {
 		return this.getWinner();
 	}
 	
+	public Player playCustomSnakeAndLadders() {
+		this.play();
+		return this.getWinner();
+	}
+	
 	public GameRunner(List<Player> players, int turns) {
 		Objects.requireNonNull(players, "Players can not be null!!");
 		
+		this.players.addAll(players);
+		this.turns = turns <= 0 ? -1 : turns;
+	}
+	
+	public GameRunner(Game game, List<Player> players, int turns) {
+		Objects.requireNonNull(players, "Players can not be null!!");
+		
+		this.game = game;
 		this.players.addAll(players);
 		this.turns = turns <= 0 ? -1 : turns;
 	}
@@ -43,9 +56,6 @@ public class GameRunner {
 	}
 	
 	private void play() {
-		
-		final Map<Integer, Ladder> ladders = game.getGameBoard().getLadders();
-		final Map<Integer, Snake> snakes = game.getGameBoard().getSnakes();
 		
 		while(! isGameCompleted() ) {
 			for(Player p : players) {
@@ -62,31 +72,39 @@ public class GameRunner {
 					continue;
 				}
 			
-				System.out.printf("Player: %s moved to %d.\n", p.getName(), pos);
-				
-				// Handling snake and ladder in a cell
-				if(ladders.containsKey(pos)) {
-					Ladder ladr =  ladders.get(pos);
-					pos = ladr.getEnd();
-					System.out.printf("Player: %s climbed ladder from position %d to %d.\n", 
-								p.getName(), ladr.getStart(), ladr.getEnd());
-				}else if(snakes.containsKey(pos)) {
-					Snake snke = snakes.get(pos);
-					pos = snke.getEnd();
-					System.out.printf("Player: %s descended snake from position %d to %d.\n", 
-							p.getName(), snke.getStart(), snke.getEnd());
-				}
-				
-				p.setPosition(pos);
+				handlePlayerPosition(p, pos);
 			}
 			this.turns--;
 		}
+	}
+
+	void handlePlayerPosition(Player p, int pos) {
+		
+		final Map<Integer, Ladder> ladders = game.getGameBoard().getLadders();
+		final Map<Integer, Snake> snakes = game.getGameBoard().getSnakes();
+		
+		System.out.printf("Player: %s moved to %d.\n", p.getName(), pos);
+		
+		// Handling snake and ladder in a cell
+		if(ladders.containsKey(pos)) {
+			Ladder ladr =  ladders.get(pos);
+			pos = ladr.getEnd();
+			System.out.printf("Player: %s climbed ladder from position %d to %d.\n", 
+						p.getName(), ladr.getStart(), ladr.getEnd());
+		}else if(snakes.containsKey(pos)) {
+			Snake snke = snakes.get(pos);
+			pos = snke.getEnd();
+			System.out.printf("Player: %s descended snake from position %d to %d.\n", 
+					p.getName(), snke.getStart(), snke.getEnd());
+		}
+		
+		p.setPosition(pos);
 	}
 	
 	private boolean isGameCompleted() {
 		// if number of turns are positive and if turns == 0 
 		if(this.turns != -1 && turns == 0){
-			System.out.println("All turns are completed. Player with max position is winner.");
+			System.out.println("All turns are completed. Player with max position is the winner.");
 			return true;
 		}
 		

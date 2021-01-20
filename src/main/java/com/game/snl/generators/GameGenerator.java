@@ -3,6 +3,9 @@ package com.game.snl.generators;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
+
 import com.game.snl.model.Dice;
 import com.game.snl.model.DiceFactory;
 import com.game.snl.model.DiceTypes;
@@ -19,6 +22,18 @@ public class GameGenerator {
 	public Game generateDefaultGame(List<Player> players, DiceTypes type) {
 		Map<Integer, Snake> snakes = generateSnakes();
 		Map<Integer, Ladder> ladders = generateLadders();
+		
+		GameBoard board = new GameBoard(boardSize, snakes, ladders);
+		
+		final Dice dice = DiceFactory.getDice(type);
+		
+		return new Game(board, players, dice);
+	}
+	
+	public Game generateCustomGame(List<Player> players, DiceTypes type, 
+								   Map<Integer, Snake> snakes, Map<Integer, Ladder> ladders) {
+		snakes = snakes == null || snakes.isEmpty()? generateSnakes() : snakes;
+		ladders = ladders == null || ladders.isEmpty()? generateLadders() : ladders;
 		
 		GameBoard board = new GameBoard(boardSize, snakes, ladders);
 		

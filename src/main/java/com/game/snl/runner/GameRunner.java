@@ -43,10 +43,16 @@ public class GameRunner {
 	
 	public GameRunner(Game game, List<Player> players, int turns) {
 		validatePlayers(players);
+		validateGame(game);
 		
 		this.game = game;
 		this.players.addAll(players);
 		this.turns = turns <= 0 ? -1 : turns;
+	}
+
+	private void validateGame(Game game) {
+		Objects.requireNonNull(game, "Custom Game can not be null!!");
+		
 	}
 
 	private void validatePlayers(List<Player> players) {

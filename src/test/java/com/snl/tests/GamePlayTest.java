@@ -50,4 +50,12 @@ public class GamePlayTest {
 		
 		Assertions.assertThrows(NullPointerException.class, ()-> new GameRunner(players, -1), "NullPointerException is not thrown.");
 	}
+	
+	@Test
+	public void nullGameTest() {
+		
+		List<Player> players = Arrays.asList(new Player("AAA"));
+		
+		Assertions.assertThrows(NullPointerException.class, ()-> new GameRunner(null, players, -1), "NullPointerException is not thrown.");
+	}
 }
